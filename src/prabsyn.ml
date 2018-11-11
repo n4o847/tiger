@@ -17,6 +17,10 @@ let rec print_indent ty =
   p !indent
 
 and print_exp = function
+  | A.ExpVar { sym } ->
+      print_string "ExpVar(";
+      print_sym sym;
+      print_string ")"
   | A.ExpInt { value } ->
       print_string "ExpInt(";
       print_int value;
@@ -37,6 +41,8 @@ and print_exp = function
       print_exp right;
       print_indent DEC;
       print_string "}"
+
+and print_sym sym = print_string (Symbol.name sym)
 
 and print_op = function
   | A.OpAdd -> print_string "OpAdd"

@@ -2,13 +2,16 @@
   module A = Absyn
 %}
 
+%token <Symbol.t> ID
 %token <int> INT
 %token PLUS MINUS TIMES DIV
 %token LPAREN RPAREN
 %token EOL
+
 %left PLUS MINUS
 %left TIMES DIV
 %nonassoc UMINUS
+
 %start main
 %type <Absyn.exp> main
 
@@ -18,7 +21,8 @@ main:
   | expr EOL                { $1 }
 
 expr:
-    INT                     { A.ExpInt { value = $1 } }
+  | ID                      { A.ExpVar { sym = $1 } }
+  | INT                     { A.ExpInt { value = $1 } }
   | LPAREN expr RPAREN      { $2 }
   | expr PLUS expr          { A.ExpOp { left = $1; op = A.OpAdd; right = $3 } }
   | expr MINUS expr         { A.ExpOp { left = $1; op = A.OpSub; right = $3 } }
